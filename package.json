@@ -9,7 +9,7 @@
     "scrape": "ts-node hoyaeats_scheduler.ts",
     "ingest_now": "ts-node ingest.ts --scrape",
     "scrape_now": "ts-node hoyaeats_scheduler.ts --scrape",
-    "vercel-build": "npm run scrape_now"
+    "vercel-build": "ts-node hoyaeats_scheduler.ts --scrape"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",
