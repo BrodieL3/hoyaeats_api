@@ -1,9 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import * as fs from "fs";
-import * as path from "path";
-import { createClient } from "@supabase/supabase-js";
-import { CronJob } from "cron";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import * as dotenv from "dotenv";
 
 // Load environment variables
@@ -97,14 +94,20 @@ const LOCATIONS = [
   "epicurean-and-company",
 ];
 
-// Output files
-const MENUS_DIR = "menus";
-const CACHE_FILE = "nutrition_cache.json";
+// Output details (No longer local files)
+const SUPABASE_BUCKET = "menus";
+const CACHE_FILENAME = "nutrition_cache.json";
 
 // Initialize Supabase client
 const supabaseUrl = process.env.SUPABASE_URL || "";
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
-const supabase = createClient(supabaseUrl, supabaseKey);
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error(
+    "Supabase URL and Key must be provided in environment variables."
+  );
+}
+const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
 
 // Optimized rate limiting settings
 const CONCURRENT_REQUESTS = 5; // Process 5 requests in parallel
@@ -114,7 +117,7 @@ const DELAY_BETWEEN_BATCHES = 1000; // 1 second between batches
 const DELAY_BETWEEN_LOCATIONS = 500; // 0.5 second between location fetches
 const DELAY_BETWEEN_DAYS = 1000; // 1 second between days
 
-// Cache for nutrition data
+// Cache for nutrition data - will be loaded from Supabase
 let nutritionCache: Record<string, Record<string, string>> = {};
 
 // Helper function to delay execution
@@ -135,51 +138,111 @@ function getNextWeekDates(): string[] {
   return dates;
 }
 
-// Load nutrition cache from file if it exists
-function loadNutritionCache() {
+// Load nutrition cache from Supabase Storage
+async function loadNutritionCache() {
+  console.log(
+    `Attempting to load nutrition cache (${CACHE_FILENAME}) from Supabase bucket '${SUPABASE_BUCKET}'...`
+  );
   try {
-    if (fs.existsSync(CACHE_FILE)) {
-      const cacheData = fs.readFileSync(CACHE_FILE, "utf8");
+    // First check if the cache file exists
+    const cacheExists = await fileExistsInStorage(CACHE_FILENAME);
+
+    if (!cacheExists) {
+      console.log(
+        `Nutrition cache (${CACHE_FILENAME}) not found in Supabase. Initializing empty cache.`
+      );
+      nutritionCache = {};
+      return;
+    }
+
+    const { data, error } = await supabase.storage
+      .from(SUPABASE_BUCKET)
+      .download(CACHE_FILENAME);
+
+    if (error) {
+      throw error;
+    }
+
+    if (data) {
+      const cacheData = await data.text();
       nutritionCache = JSON.parse(cacheData);
       console.log(
-        `Loaded ${Object.keys(nutritionCache).length} cached nutrition items`
+        `Loaded ${
+          Object.keys(nutritionCache).length
+        } cached nutrition items from Supabase.`
       );
     } else {
+      console.log(
+        "No data received for nutrition cache, initializing empty cache."
+      );
       nutritionCache = {};
     }
   } catch (err) {
-    console.error("Error loading nutrition cache:", err);
-    nutritionCache = {};
+    console.error("Error loading nutrition cache from Supabase:", err);
+    console.log("Initializing empty nutrition cache due to error.");
+    nutritionCache = {}; // Initialize empty cache on error
   }
 }
 
-// Save nutrition cache to file
-function saveNutritionCache() {
+// Save nutrition cache directly to Supabase Storage
+async function saveNutritionCache() {
+  console.log(
+    `Attempting to save nutrition cache to Supabase bucket '${SUPABASE_BUCKET}' as ${CACHE_FILENAME}...`
+  );
   try {
-    fs.writeFileSync(CACHE_FILE, JSON.stringify(nutritionCache, null, 2));
-    console.log(
-      `Saved ${Object.keys(nutritionCache).length} nutrition items to cache`
-    );
-
-    // Upload nutrition cache to Supabase
-    uploadToSupabase(CACHE_FILE, "nutrition_cache.json").catch((err) => {
-      console.error("Error uploading nutrition cache to Supabase:", err);
-    });
-  } catch (err) {
-    console.error("Error saving nutrition cache:", err);
-  }
-}
-
-// Upload file to Supabase storage
-async function uploadToSupabase(filePath: string, fileName: string) {
-  try {
-    const fileData = fs.readFileSync(filePath);
+    const cacheString = JSON.stringify(nutritionCache, null, 2);
+    // Vercel environment might require Buffer
+    const cacheData = Buffer.from(cacheString);
 
     const { data, error } = await supabase.storage
-      .from("menus")
-      .upload(fileName, fileData, {
+      .from(SUPABASE_BUCKET)
+      .upload(CACHE_FILENAME, cacheData, {
         contentType: "application/json",
-        upsert: true,
+        upsert: true, // Overwrite if exists
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    console.log(
+      `Successfully saved ${
+        Object.keys(nutritionCache).length
+      } nutrition items to Supabase as ${CACHE_FILENAME}`
+    );
+    return data;
+  } catch (err) {
+    console.error("Error saving nutrition cache to Supabase:", err);
+    throw err; // Re-throw error to indicate failure if needed
+  }
+}
+
+// Upload data directly to Supabase storage
+async function uploadToSupabase(
+  dataToUpload: string | Buffer,
+  fileName: string,
+  contentType: string = "application/json"
+) {
+  console.log(
+    `Uploading ${fileName} to Supabase bucket '${SUPABASE_BUCKET}'...`
+  );
+  try {
+    // Check if file already exists
+    const fileExists = await fileExistsInStorage(fileName);
+
+    if (fileExists) {
+      console.log(
+        `File ${fileName} already exists in storage. Updating content...`
+      );
+    } else {
+      console.log(`File ${fileName} does not exist yet. Creating new file...`);
+    }
+
+    const { data, error } = await supabase.storage
+      .from(SUPABASE_BUCKET)
+      .upload(fileName, dataToUpload, {
+        contentType: contentType,
+        upsert: true, // Overwrite if exists
       });
 
     if (error) {
@@ -190,7 +253,7 @@ async function uploadToSupabase(filePath: string, fileName: string) {
     return data;
   } catch (error) {
     console.error(`Error uploading ${fileName} to Supabase:`, error);
-    throw error;
+    throw error; // Re-throw error
   }
 }
 
@@ -468,6 +531,13 @@ async function fetchLocationPage(
   }
 }
 
+// Add this function before the fetchNutrition function
+function isAxiosError(error: any): error is Error & {
+  response?: { status: number; headers: Record<string, string>; data?: any };
+} {
+  return error && error.isAxiosError === true;
+}
+
 async function fetchNutrition(
   recipeId: number, // Changed to number type
   retryCount = 0
@@ -479,15 +549,21 @@ async function fetchNutrition(
     nutritionCache[recipeIdStr] &&
     Object.keys(nutritionCache[recipeIdStr]).length > 0
   ) {
-    return nutritionCache[recipeIdStr];
+    // Return a copy to prevent accidental modification of the cache
+    return { ...nutritionCache[recipeIdStr] };
   }
 
   try {
     const url = `${RECIPE_ENDPOINT}${recipeId}`;
+    console.log(`Fetching nutrition for recipe ID: ${recipeId}`); // Added log
     const response = await axios.get<NutritionResponse>(url);
     const data = response.data;
 
     if (!data.success || !data.html) {
+      console.warn(
+        `Invalid response format for recipe ${recipeId}. Response:`,
+        data
+      ); // Added log
       throw new Error("Invalid response format");
     }
 
@@ -544,94 +620,91 @@ async function fetchNutrition(
     $("table.nutrition-facts-table tr").each((_, el) => {
       const rowText = $(el).text().trim();
 
-      // Skip rows we've already processed
+      // Skip rows we've already processed or header rows
       if (
         rowText.includes("Amount Per Serving") ||
         rowText.includes("Calories") ||
         rowText.includes("Total Fat") ||
         rowText.includes("Total Carbohydrate") ||
-        rowText.includes("Protein")
+        rowText.includes("Protein") ||
+        rowText.includes("% Daily Value") // Skip header
       ) {
         return;
       }
 
-      // Process other nutrients
-      const nutrientMatches = rowText.match(
-        /([A-Za-z\s]+)([\d\.]+\s*[a-z]+)(\d+%)?/i
-      );
-      if (nutrientMatches && nutrientMatches[1] && nutrientMatches[2]) {
-        const name = nutrientMatches[1].trim();
-        const value = nutrientMatches[2].trim();
+      // Process other nutrients more robustly
+      const cells = $(el).find("td, th"); // Get both th and td elements within the row
+      if (cells.length >= 2) {
+        let name = $(cells[0])
+          .text()
+          .replace(/[\s\*\:]+$/, "")
+          .trim(); // Clean name
+        let value = $(cells[1]).text().trim();
 
-        if (name && value && !name.includes("blank-cell")) {
-          nutrition[name] = value;
+        // Handle indented nutrients (like Saturated Fat under Total Fat)
+        if (name.startsWith(" ")) {
+          name = name.trim();
+        }
+
+        // Simple check to avoid empty values or placeholder text
+        if (
+          name &&
+          value &&
+          !name.includes("blank-cell") &&
+          !value.includes("%") &&
+          value.match(/[\d\.]+\s*[a-z]+/i)
+        ) {
+          // Remove potential percentage values that might be included in the value
+          value = value.replace(/\s*\d+%?$/, "").trim();
+          if (value) {
+            // Ensure value is not empty after cleaning
+            nutrition[name] = value;
+          }
         }
       }
     });
 
-    // Verify we have the essential nutrients
-    const essentialNutrients = ["Fat", "Carbohydrate", "Protein"];
-    const missingNutrients = essentialNutrients.filter(
-      (nutrient) => !nutrition[nutrient]
-    );
-
-    if (missingNutrients.length > 0) {
+    // Save to cache only if we found some data
+    if (Object.keys(nutrition).length > 0) {
+      console.log(`Fetched nutrition for recipe ${recipeId}:`, nutrition); // Added log
+      nutritionCache[recipeIdStr] = nutrition;
+    } else {
       console.warn(
-        `Missing essential nutrients for recipe ${recipeId}: ${missingNutrients.join(
-          ", "
-        )}`
+        `No nutrition data extracted for recipe ${recipeId}. HTML head:`,
+        data.html.substring(0, 200)
       );
-
-      // Try alternative extraction for missing nutrients
-      const htmlText = data.html;
-
-      for (const nutrient of missingNutrients) {
-        if (nutrient === "Fat" && htmlText.includes("Total Fat")) {
-          const fatMatch = htmlText.match(/<b>Total Fat<\/b>\s+([\d\.]+\s*g)/);
-          if (fatMatch && fatMatch[1]) nutrition["Fat"] = fatMatch[1].trim();
-        }
-
-        if (
-          nutrient === "Carbohydrate" &&
-          htmlText.includes("Total Carbohydrate")
-        ) {
-          const carbMatch = htmlText.match(
-            /<b>Total Carbohydrate<\/b>\s+([\d\.]+\s*g)/
-          );
-          if (carbMatch && carbMatch[1])
-            nutrition["Carbohydrate"] = carbMatch[1].trim();
-        }
-
-        if (nutrient === "Protein" && htmlText.includes("Protein")) {
-          const proteinMatch = htmlText.match(
-            /<b>Protein<\/b>\s+([\d\.]+\s*g)/
-          );
-          if (proteinMatch && proteinMatch[1])
-            nutrition["Protein"] = proteinMatch[1].trim();
-        }
-      }
     }
-
-    // Save to cache
-    nutritionCache[recipeIdStr] = nutrition;
     return nutrition;
   } catch (err: any) {
-    if (err.response?.status === 429 && retryCount < 3) {
-      const retryAfter = parseInt(
-        err.response.headers["retry-after"] || "5",
-        10
-      );
-      const waitTime = (retryAfter + Math.random() * 2) * 1000;
-      console.log(
-        `Rate limited. Waiting ${waitTime / 1000} seconds before retry ${
-          retryCount + 1
-        } for recipe ${recipeId}`
-      );
-      await delay(waitTime);
-      return fetchNutrition(recipeId, retryCount + 1);
+    // Improved error logging and handling
+    let errorMessage = `Error fetching nutrition for recipe ${recipeId}: `;
+    if (isAxiosError(err)) {
+      errorMessage += `Status: ${err.response?.status}, Message: ${err.message}`;
+      if (err.response?.status === 404) {
+        console.warn(`Recipe ${recipeId} not found (404). Skipping.`);
+        return {}; // Return empty object for 404
+      }
+      if (err.response?.status === 429 && retryCount < 3) {
+        const retryAfter = parseInt(
+          err.response.headers["retry-after"] || "5",
+          10
+        );
+        const waitTime = (retryAfter + Math.random() * 2) * 1000;
+        console.log(
+          `Rate limited fetching nutrition for ${recipeId}. Waiting ${
+            waitTime / 1000
+          }s before retry ${retryCount + 1}`
+        );
+        await delay(waitTime);
+        return fetchNutrition(recipeId, retryCount + 1);
+      }
+    } else if (err instanceof Error) {
+      errorMessage += err.message;
+    } else {
+      errorMessage += "Unknown error occurred.";
     }
-    console.error(`Error fetching nutrition for recipe ${recipeId}:`, err);
-    return {};
+    console.error(errorMessage, err);
+    return {}; // Return empty object on error
   }
 }
 
@@ -641,17 +714,18 @@ async function processNutritionData(
   itemsMap: Record<string, any>,
   concurrency = CONCURRENT_REQUESTS
 ): Promise<void> {
-  // Collect all recipe IDs that need nutrition data
-  const recipesToFetch: { recipeId: number; reference: FoodItem }[] = [];
+  // Collect all unique recipe IDs that need nutrition data from both structures
+  const recipesToFetchSet = new Set<number>();
 
-  // Traverse the menu structure to find all food items
+  // Traverse the menu structure
   Object.values(menuData.locations).forEach((location) => {
     Object.values(location.days).forEach((day) => {
       Object.values(day.mealPeriods).forEach((mealPeriod) => {
         Object.values(mealPeriod.stations).forEach((station) => {
           station.items.forEach((item) => {
-            if (item.recipeId && Object.keys(item.nutrition).length === 0) {
-              recipesToFetch.push({ recipeId: item.recipeId, reference: item });
+            // Add if recipeId exists and is not already cached
+            if (item.recipeId && !nutritionCache[item.recipeId.toString()]) {
+              recipesToFetchSet.add(item.recipeId);
             }
           });
         });
@@ -659,46 +733,53 @@ async function processNutritionData(
     });
   });
 
-  // Also check items in the normalized structure
+  // Check items in the normalized structure (itemsMap)
   Object.values(itemsMap).forEach((item) => {
-    if (
-      item.recipeId &&
-      !recipesToFetch.some((r) => r.recipeId === item.recipeId)
-    ) {
-      recipesToFetch.push({ recipeId: item.recipeId, reference: item });
+    if (item.recipeId && !nutritionCache[item.recipeId.toString()]) {
+      recipesToFetchSet.add(item.recipeId);
     }
   });
 
+  const recipesToFetch = Array.from(recipesToFetchSet);
   console.log(
-    `Need to fetch nutrition data for ${recipesToFetch.length} items`
+    `Need to fetch nutrition data for ${recipesToFetch.length} unique items (not already cached).`
   );
 
+  if (recipesToFetch.length === 0) {
+    console.log("No new nutrition data needs to be fetched.");
+    return;
+  }
+
   // Process in batches with controlled concurrency
-  const batches: (typeof recipesToFetch)[] = [];
+  const batches: number[][] = [];
   for (let i = 0; i < recipesToFetch.length; i += BATCH_SIZE) {
     batches.push(recipesToFetch.slice(i, i + BATCH_SIZE));
   }
 
+  let fetchedCount = 0;
   for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
     const batch = batches[batchIndex];
     console.log(
-      `Processing nutrition batch ${batchIndex + 1} of ${batches.length}`
+      `Processing nutrition batch ${batchIndex + 1} of ${
+        batches.length
+      } (Size: ${batch.length})`
     );
 
     // Process each mini-batch concurrently
-    const miniBatches: (typeof recipesToFetch)[] = [];
+    const miniBatches: number[][] = [];
     for (let i = 0; i < batch.length; i += concurrency) {
       miniBatches.push(batch.slice(i, i + concurrency));
     }
 
     for (const miniBatch of miniBatches) {
       await Promise.all(
-        miniBatch.map(async ({ recipeId, reference }) => {
+        miniBatch.map(async (recipeId) => {
           try {
-            const nutrition = await fetchNutrition(recipeId);
-            reference.nutrition = nutrition;
+            // Fetch nutrition (will update nutritionCache inside)
+            await fetchNutrition(recipeId);
+            fetchedCount++;
           } catch (err) {
-            console.error(`Error fetching nutrition for ${recipeId}:`, err);
+            // Error is already logged in fetchNutrition
           }
         })
       );
@@ -706,71 +787,92 @@ async function processNutritionData(
       // Small delay between mini-batches
       await delay(DELAY_BETWEEN_ITEMS);
     }
+    console.log(
+      `Finished processing mini-batches for batch ${
+        batchIndex + 1
+      }. Fetched ${fetchedCount} items so far.`
+    );
 
     // Delay between larger batches
     if (batchIndex < batches.length - 1) {
+      console.log(
+        `Waiting ${DELAY_BETWEEN_BATCHES / 1000}s before next batch...`
+      );
       await delay(DELAY_BETWEEN_BATCHES);
     }
   }
 
-  console.log("Finished fetching all nutrition data");
+  console.log(
+    `Finished fetching nutrition data. Total items fetched in this run: ${fetchedCount}`
+  );
 }
 
-// Check which dates need to be generated
-function getDatesToProcess(allDates: string[]): string[] {
+// Check which dates need to be generated by checking file existence in Supabase Storage
+async function getDatesToProcess(allDates: string[]): Promise<string[]> {
+  console.log("Checking Supabase Storage for existing date files...");
   try {
-    if (!fs.existsSync(MENUS_DIR)) {
-      fs.mkdirSync(MENUS_DIR, { recursive: true });
-      console.log(`Created ${MENUS_DIR} directory`);
-      return allDates; // Generate all if directory doesn't exist
+    const existingDatesSet = new Set<string>();
+
+    // Check each date file individually
+    for (const date of allDates) {
+      const fileName = `${date}.json`;
+      const exists = await fileExistsInStorage(fileName);
+
+      if (exists) {
+        existingDatesSet.add(date);
+        console.log(`File for date ${date} already exists in storage.`);
+      }
     }
 
-    const existingFiles = fs.readdirSync(MENUS_DIR);
-    const existingDates = existingFiles
-      .filter((file) => file.endsWith(".json"))
-      .map((file) => file.replace(".json", ""))
-      .filter((date) => /^\d{4}-\d{2}-\d{2}$/.test(date)); // Ensure we have valid date format
-
     const datesToProcess = allDates.filter(
-      (date) => !existingDates.includes(date)
+      (date) => !existingDatesSet.has(date)
     );
 
-    console.log(`Found ${existingDates.length} existing date files`);
-    console.log(`Need to generate ${datesToProcess.length} new date files`);
+    console.log(
+      `Found ${existingDatesSet.size} existing date files in Supabase Storage.`
+    );
+    console.log(
+      `Need to generate ${
+        datesToProcess.length
+      } new date files: [${datesToProcess.join(", ")}]`
+    );
 
     return datesToProcess;
   } catch (err) {
-    console.error("Error checking existing dates:", err);
-    return allDates; // Process all dates if there's an error
+    console.error("Unexpected error checking existing dates in Supabase:", err);
+    console.warn("Proceeding to generate for all dates due to error.");
+    return allDates; // Process all dates if there's an unexpected error
   }
 }
 
-async function scrapeAllLocations() {
+async function scrapeAllLocations(): Promise<boolean> {
   console.log(`Starting HoyaEats scrape at ${new Date().toISOString()}`);
 
-  // Ensure menus directory exists
-  if (!fs.existsSync(MENUS_DIR)) {
-    fs.mkdirSync(MENUS_DIR, { recursive: true });
-    console.log(`Created ${MENUS_DIR} directory`);
-  }
-
-  // Load nutrition cache first
-  loadNutritionCache();
+  // Load nutrition cache from Supabase first
+  await loadNutritionCache();
 
   // Get all dates for the next week
   const allDates = getNextWeekDates();
 
-  // Check which dates we need to process
-  const datesToProcess = getDatesToProcess(allDates);
+  // Check Supabase Storage for which dates we need to process
+  const datesToProcess = await getDatesToProcess(allDates);
+
+  let processedAnyData = false;
 
   if (datesToProcess.length === 0) {
-    console.log("All date files already exist, nothing to do.");
-    return true;
+    console.log(
+      "All required date files already exist in Supabase Storage. No new menu data to process."
+    );
+    // Still process nutrition data for existing items in the cache
+    await processAllNutritionData();
+    // Save the updated nutrition cache
+    await saveNutritionCache();
+    return false; // Indicate no new data was processed
   }
 
   // Process data for each date that needs processing
   for (const date of datesToProcess) {
-    console.log(`Processing menu for date: ${date}`);
+    console.log(`--- Processing menu for date: ${date} ---`);
 
     // Initialize menu data structure for this date
     const menuData: MenuData = {
@@ -799,6 +901,7 @@ async function scrapeAllLocations() {
       // Add this day's data to the menu structure
       if (Object.keys(locationData.mealPeriods).length > 0) {
         menuData.locations[locationId].days[date] = locationData;
+        processedAnyData = true; // Mark that we found data for this date
 
         // Add each food item to the centralized items map
         Object.values(locationData.mealPeriods).forEach((mealPeriod) => {
@@ -814,6 +917,10 @@ async function scrapeAllLocations() {
             });
           });
         });
+      } else {
+        console.log(
+          `No meal periods found for ${locationId} on ${date}. Skipping.`
+        );
       }
 
       // Wait between locations
@@ -822,44 +929,61 @@ async function scrapeAllLocations() {
       }
     }
 
-    // Process nutrition data for all items
+    // If no data was processed for any location on this date, skip nutrition and saving
+    if (!processedAnyData) {
+      console.log(
+        `No menu data found for any location on ${date}. Skipping nutrition processing and saving for this date.`
+      );
+      continue; // Move to the next date
+    }
+
+    // Process nutrition data for all items collected for this date
     await processNutritionData(menuData, itemsMap);
 
     // Create normalized structure for this date
     const normalizedMenuData: NormalizedMenuData = {
       locations: {},
-      items: {},
+      items: {}, // Will be populated below
       date,
       lastUpdated: new Date().toISOString(),
     };
 
-    // Convert the structure to use references
+    // Populate the normalized structure
     Object.entries(menuData.locations).forEach(([locationId, location]) => {
+      const dateData = location.days[date];
+      if (!dateData || Object.keys(dateData.mealPeriods).length === 0) {
+        // Skip locations if they had no data for this date in this structure
+        return;
+      }
+
       normalizedMenuData.locations[locationId] = {
         name: location.name,
         mealPeriods: {},
       };
 
-      // Get data for this date
-      const dateData = location.days[date];
-      if (!dateData) return;
-
       Object.entries(dateData.mealPeriods).forEach(([mealTime, mealData]) => {
+        if (Object.keys(mealData.stations).length === 0) {
+          // Skip empty meal periods
+          return;
+        }
+
         normalizedMenuData.locations[locationId].mealPeriods[mealTime] = {
           stations: {},
         };
 
         Object.entries(mealData.stations).forEach(
           ([stationName, stationData]) => {
-            // Ensure stationData has itemIDs property
             if (stationData.itemIDs && stationData.itemIDs.length > 0) {
               normalizedMenuData.locations[locationId].mealPeriods[
                 mealTime
               ].stations[stationName] = {
                 itemIDs: stationData.itemIDs,
               };
-            } else {
-              // If itemIDs is missing, generate them from items (this shouldn't happen with our updated code)
+            } else if (stationData.items && stationData.items.length > 0) {
+              // Fallback: If itemIDs is missing, generate them from items
+              console.warn(
+                `Generating missing itemIDs for ${locationId} -> ${mealTime} -> ${stationName} on ${date}`
+              );
               const itemIDs = stationData.items.map((item) =>
                 generateSlug(item.name, item.recipeId.toString())
               );
@@ -869,200 +993,84 @@ async function scrapeAllLocations() {
                 itemIDs: itemIDs,
               };
             }
+            // If both items and itemIDs are empty/missing, the station won't be added, which is correct.
           }
         );
-      });
-    });
 
-    // Add items without nutrition field
-    normalizedMenuData.items = itemsMap;
-
-    // Save the results for this date
-    const dateFilePath = path.join(MENUS_DIR, `${date}.json`);
-    fs.writeFileSync(dateFilePath, JSON.stringify(normalizedMenuData, null, 2));
-    console.log(`Saved menu data for ${date} to ${dateFilePath}`);
-
-    // Upload to Supabase
-    try {
-      await uploadToSupabase(dateFilePath, `${date}.json`);
-    } catch (error) {
-      console.error(`Failed to upload ${date}.json to Supabase`, error);
-    }
-  }
-
-  // Save the nutrition cache
-  saveNutritionCache();
-
-  console.log(`Scrape complete at ${new Date().toISOString()}`);
-  console.log(`Processed ${datesToProcess.length} days of menu data`);
-
-  return true;
-}
-
-// Setup the cron job (runs at 2AM Eastern Time and creates files for the upcoming day)
-const job = new CronJob(
-  "0 2 * * *", // Runs at 2:00 AM
-  function () {
-    console.log("Running scheduled HoyaEats menu scrape");
-    scrapeAllLocations().catch((err) => {
-      console.error("Error in scheduled scrape:", err);
-    });
-  },
-  null, // onComplete
-  false, // start immediately
-  "America/New_York" // Eastern Time Zone
-);
-
-// Create a specific daily job to generate tomorrow's menu
-const dailyJob = new CronJob(
-  "0 3 * * *", // Runs at 3:00 AM
-  async function () {
-    try {
-      console.log("Running daily menu scrape for tomorrow");
-
-      // Get tomorrow's date
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      const tomorrowStr = tomorrow.toISOString().split("T")[0];
-
-      // Check if tomorrow's file already exists
-      const tomorrowFilePath = path.join(MENUS_DIR, `${tomorrowStr}.json`);
-      if (fs.existsSync(tomorrowFilePath)) {
-        console.log(`File for ${tomorrowStr} already exists, skipping.`);
-        return;
-      }
-
-      // Create menu data structure for tomorrow
-      const menuData: MenuData = {
-        locations: {},
-        lastUpdated: new Date().toISOString(),
-      };
-
-      // Items map for normalized structure
-      const itemsMap: Record<string, any> = {};
-
-      // Load nutrition cache
-      loadNutritionCache();
-
-      // Process each location for tomorrow
-      for (const locationId of LOCATIONS) {
-        // Initialize location in menu data
-        menuData.locations[locationId] = {
-          name: locationId
-            .replace(/-/g, " ")
-            .replace(/\b\w/g, (l) => l.toUpperCase()),
-          days: {},
-        };
-
-        // Fetch location data for tomorrow
-        const locationData = await fetchLocationPage(locationId, tomorrowStr);
-
-        // Add tomorrow's data to the menu structure
-        if (Object.keys(locationData.mealPeriods).length > 0) {
-          menuData.locations[locationId].days[tomorrowStr] = locationData;
-
-          // Add each food item to the centralized items map
-          Object.values(locationData.mealPeriods).forEach((mealPeriod) => {
-            Object.values(mealPeriod.stations).forEach((station) => {
-              station.items.forEach((item, index) => {
-                const itemID = station.itemIDs[index];
-                if (!itemsMap[itemID]) {
-                  const { nutrition, ...itemWithoutNutrition } = item;
-                  itemsMap[itemID] = itemWithoutNutrition;
-                }
-              });
-            });
-          });
+        // Clean up empty meal periods if all stations ended up empty
+        if (
+          Object.keys(
+            normalizedMenuData.locations[locationId].mealPeriods[mealTime]
+              .stations
+          ).length === 0
+        ) {
+          delete normalizedMenuData.locations[locationId].mealPeriods[mealTime];
         }
-
-        await delay(DELAY_BETWEEN_LOCATIONS);
-      }
-
-      // Process nutrition data
-      await processNutritionData(menuData, itemsMap);
-
-      // Create normalized structure
-      const normalizedMenuData: NormalizedMenuData = {
-        locations: {},
-        items: {},
-        date: tomorrowStr,
-        lastUpdated: new Date().toISOString(),
-      };
-
-      // Convert structure to use references
-      Object.entries(menuData.locations).forEach(([locationId, location]) => {
-        normalizedMenuData.locations[locationId] = {
-          name: location.name,
-          mealPeriods: {},
-        };
-
-        const dateData = location.days[tomorrowStr];
-        if (!dateData) return;
-
-        Object.entries(dateData.mealPeriods).forEach(([mealTime, mealData]) => {
-          normalizedMenuData.locations[locationId].mealPeriods[mealTime] = {
-            stations: {},
-          };
-
-          Object.entries(mealData.stations).forEach(
-            ([stationName, stationData]) => {
-              if (stationData.itemIDs && stationData.itemIDs.length > 0) {
-                normalizedMenuData.locations[locationId].mealPeriods[
-                  mealTime
-                ].stations[stationName] = {
-                  itemIDs: stationData.itemIDs,
-                };
-              }
-            }
-          );
-        });
       });
 
-      // Add items without nutrition field
-      normalizedMenuData.items = itemsMap;
+      // Clean up empty locations if all meal periods ended up empty
+      if (
+        Object.keys(normalizedMenuData.locations[locationId].mealPeriods)
+          .length === 0
+      ) {
+        delete normalizedMenuData.locations[locationId];
+      }
+    });
 
-      // Save results for tomorrow
-      fs.writeFileSync(
-        tomorrowFilePath,
-        JSON.stringify(normalizedMenuData, null, 2)
-      );
-      console.log(`Saved menu data for ${tomorrowStr} to ${tomorrowFilePath}`);
+    // Add items with updated nutrition from cache
+    Object.keys(itemsMap).forEach((itemID) => {
+      const item = itemsMap[itemID];
+      const recipeIdStr = item.recipeId?.toString();
+      const cachedNutrition = recipeIdStr
+        ? nutritionCache[recipeIdStr]
+        : undefined;
 
-      // Upload to Supabase
-      await uploadToSupabase(tomorrowFilePath, `${tomorrowStr}.json`);
+      normalizedMenuData.items[itemID] = {
+        ...item,
+        // Optionally add nutrition back if needed, otherwise keep it separate
+        // nutrition: cachedNutrition || {},
+      };
+    });
 
-      // Save nutrition cache
-      saveNutritionCache();
+    // Save the normalized results for this date directly to Supabase
+    const dateFileName = `${date}.json`;
+    try {
+      // Check if file already exists in storage
+      const fileExists = await fileExistsInStorage(dateFileName);
 
-      console.log(`Daily scrape for ${tomorrowStr} complete`);
-    } catch (err) {
-      console.error("Error in daily scrape:", err);
+      if (fileExists) {
+        console.log(
+          `File ${dateFileName} already exists in storage. Updating with new data...`
+        );
+      } else {
+        console.log(`Creating new file ${dateFileName} in storage...`);
+      }
+
+      const jsonDataString = JSON.stringify(normalizedMenuData, null, 2);
+      const jsonDataBuffer = Buffer.from(jsonDataString); // Use Buffer
+      await uploadToSupabase(jsonDataBuffer, dateFileName, "application/json");
+      console.log(`Saved menu data for ${date} directly to Supabase.`);
+    } catch (error) {
+      console.error(`Failed to upload ${dateFileName} to Supabase`, error);
+      // Decide if you want to stop the whole process or continue with the next date
     }
-  },
-  null,
-  false,
-  "America/New_York"
-);
 
-// Function to handle manual scrape
-async function runScrape() {
-  console.log("Running manual HoyaEats menu scrape");
-  await scrapeAllLocations();
-}
+    // Wait between days if processing multiple dates
+    if (date !== datesToProcess[datesToProcess.length - 1]) {
+      await delay(DELAY_BETWEEN_DAYS);
+    }
+  } // End loop over datesToProcess
 
-// Check if this is being run directly
-if (require.main === module) {
-  // Start the cron jobs
-  job.start();
-  dailyJob.start();
-  console.log("HoyaEats scheduler started");
-  console.log("Next scheduled full run:", job.nextDate().toString());
-  console.log("Next scheduled daily run:", dailyJob.nextDate().toString());
+  // Process any remaining nutrition data (includes items from all dates)
+  await processAllNutritionData();
 
-  // Run immediately on first start if --scrape flag is provided
-  if (process.argv.includes("--scrape")) {
-    runScrape();
-  }
+  // Always save the updated nutrition cache at the end of the process
+  await saveNutritionCache();
+
+  console.log(`Scrape completed at ${new Date().toISOString()}`);
+  console.log(`Processed ${datesToProcess.length} days of menu data.`);
+
+  return processedAnyData; // Return true if any new data was processed across all dates
 }
 
 // Helper function to generate a slug from a food item name
@@ -1078,14 +1086,133 @@ function generateSlug(name: string, recipeId: string): string {
     .substring(0, 50);
 
   // Add part of the recipeId for uniqueness if available
-  if (recipeId) {
+  if (recipeId && recipeId !== "0") {
+    // Check recipeId is valid
     // Take the last 6 characters of the recipe ID to ensure uniqueness
     const idSuffix = recipeId.substring(Math.max(0, recipeId.length - 6));
     slug = `${slug}-${idSuffix}`;
+  } else {
+    // If no valid recipeId, maybe add a short hash of the name for more uniqueness?
+    // Example: const nameHash = require('crypto').createHash('sha1').update(name).digest('hex').substring(0, 6);
+    // slug = `${slug}-${nameHash}`;
+    // For now, just use the name slug if recipeId is missing/invalid
+  }
+
+  // Ensure slug is not empty
+  if (!slug) {
+    return `item-${recipeId || Math.random().toString(36).substring(2, 8)}`;
   }
 
   return slug;
 }
 
-// Export functions for use in other scripts
-export { scrapeAllLocations, runScrape, NormalizedMenuData };
+// Utility function to check if a file exists in Supabase storage
+async function fileExistsInStorage(
+  fileName: string,
+  path: string = ""
+): Promise<boolean> {
+  try {
+    // Get the head of the file to check if it exists (returns metadata without downloading)
+    const { data, error } = await supabase.storage
+      .from(SUPABASE_BUCKET)
+      .createSignedUrl(`${path}${fileName}`, 60); // 60 seconds expiry
+
+    if (error) {
+      // If there's an error, the file likely doesn't exist
+      console.log(
+        `File ${fileName} doesn't exist in storage: ${error.message}`
+      );
+      return false;
+    }
+
+    // If we get back data with a URL, the file exists
+    return !!data;
+  } catch (err) {
+    console.error(`Error checking if file ${fileName} exists:`, err);
+    return false; // Assume file doesn't exist if there's an error
+  }
+}
+
+// Process nutrition data for all items collected for all dates
+async function processAllNutritionData(): Promise<void> {
+  console.log("Processing nutrition data for all items in cache...");
+
+  try {
+    // Create a set to track all unique recipe IDs
+    const allRecipeIds = new Set<number>();
+
+    // Add all recipe IDs from the nutrition cache for processing
+    Object.keys(nutritionCache).forEach((recipeIdStr) => {
+      const recipeId = parseInt(recipeIdStr);
+      if (!isNaN(recipeId) && recipeId > 0) {
+        allRecipeIds.add(recipeId);
+      }
+    });
+
+    console.log(
+      `Found ${allRecipeIds.size} unique recipe IDs to check for nutrition data.`
+    );
+
+    // Convert to array for processing
+    const recipeIdsArray = Array.from(allRecipeIds);
+
+    // Process in batches with the same settings as regular nutrition processing
+    const batches: number[][] = [];
+    for (let i = 0; i < recipeIdsArray.length; i += BATCH_SIZE) {
+      batches.push(recipeIdsArray.slice(i, i + BATCH_SIZE));
+    }
+
+    let fetchedCount = 0;
+    for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
+      const batch = batches[batchIndex];
+      console.log(
+        `Processing nutrition batch ${batchIndex + 1} of ${
+          batches.length
+        } (Size: ${batch.length})`
+      );
+
+      // Process each mini-batch concurrently
+      const miniBatches: number[][] = [];
+      for (let i = 0; i < batch.length; i += CONCURRENT_REQUESTS) {
+        miniBatches.push(batch.slice(i, i + CONCURRENT_REQUESTS));
+      }
+
+      for (const miniBatch of miniBatches) {
+        await Promise.all(
+          miniBatch.map(async (recipeId) => {
+            try {
+              // Fetch nutrition (will update nutritionCache inside)
+              await fetchNutrition(recipeId);
+              fetchedCount++;
+            } catch (err) {
+              // Error is already logged in fetchNutrition
+            }
+          })
+        );
+
+        // Small delay between mini-batches
+        await delay(DELAY_BETWEEN_ITEMS);
+      }
+
+      console.log(
+        `Finished processing mini-batches for batch ${
+          batchIndex + 1
+        }. Fetched ${fetchedCount} items so far.`
+      );
+
+      // Delay between larger batches
+      if (batchIndex < batches.length - 1) {
+        await delay(DELAY_BETWEEN_BATCHES);
+      }
+    }
+
+    console.log(
+      `Finished processing nutrition data. Total items fetched in this run: ${fetchedCount}`
+    );
+  } catch (error) {
+    console.error("Error processing nutrition data:", error);
+  }
+}
+
+// Export only the necessary function for the API route
+export { scrapeAllLocations };

@@ -16,14 +16,17 @@
     "@types/cron": "^2.0.1",
     "axios": "^1.8.4",
     "cheerio": "^1.0.0",
-    "cron": "^4.1.3",
-    "dotenv": "^16.4.7",
-    "supabase": "^2.4.0"
+    "dotenv": "^16.5.0",
+    "supabase": "^2.4.0",
+    "vercel": "^41.6.2"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.149",
     "@types/cheerio": "^0.22.35",
-    "@types/node": "^22.14.0",
+    "@types/node": "^22.14.1",
+    "@vercel/node": "^2.3.0",
+    "esbuild": "^0.25.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   }
 }
