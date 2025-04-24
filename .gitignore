@@ -1,6 +1,9 @@
+node_modules/
 .env*
-/node_modules
+.gitignore*
 /menus
+
+
 nutrition_cache.json*
 npm-debug.log*
 yarn-debug.log*
