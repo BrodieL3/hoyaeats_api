@@ -24,20 +24,11 @@ npx ts-node hoyaeats_scheduler.ts --scrape
 
 ## Usage
 
-### Run on a schedule
-
-The script is configured to run daily at 2:00 AM Eastern Time:
-
-```bash
-node hoyaeats_scheduler.js
-```
-
-### Run immediately
-
-To start the scheduler and run a scrape immediately:
+### Run the scheduler
+To schedule to run at 2:00am EST
 
 ```bash
-node hoyaeats_scheduler.js --scrape
+npx ts-node hoyaeats.ts 
 ```
 
 ### Run a one-time scrape
@@ -45,7 +36,7 @@ node hoyaeats_scheduler.js --scrape
 To run just once without scheduling:
 
 ```bash
-node -e "require('./hoyaeats_scheduler.js').runScrape()"
+npx ts-node hoyaeats.ts --scrape
 ```
 
 ## Output
