@@ -4,13 +4,21 @@
   "description": "Scraper for Hoyaeats",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.ts",
+    "ingest": "ts-node ingest.ts",
+    "scrape": "ts-node hoyaeats_scheduler.ts",
+    "ingest_now": "ts-node ingest.ts --scrape",
+    "scrape_now": "ts-node hoyaeats_scheduler.ts --scrape",
+    "vercel-build": "npm run scrape_now"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
     "@types/cron": "^2.0.1",
     "axios": "^1.8.4",
     "cheerio": "^1.0.0",
-    "cron": "^4.1.3"
+    "cron": "^4.1.3",
+    "dotenv": "^16.4.7",
+    "supabase": "^2.4.0"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.35",
