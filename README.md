@@ -28,7 +28,7 @@ npx ts-node hoyaeats_scheduler.ts --scrape
 To schedule to run at 2:00am EST
 
 ```bash
-npx ts-node hoyaeats.ts 
+npx ts-node hoyaeats_scheduler.ts 
 ```
 
 ### Run a one-time scrape
@@ -36,7 +36,7 @@ npx ts-node hoyaeats.ts
 To run just once without scheduling:
 
 ```bash
-npx ts-node hoyaeats.ts --scrape
+npx ts-node hoyaeats_scheduler.ts --scrape
 ```
 
 ## Output
