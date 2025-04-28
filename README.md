@@ -1,6 +1,6 @@
 # HoyaEats Menu Scraper
 
-This script fetches and updates menu data from HoyaEats dining locations, including nutritional information and meal time availability.
+This script fetches and updates menu data from HoyaEats dining locations, including nutritional information and meal time availability. Currently being automated using Vercel's Cron Jobs feature.
 
 ## Setup
 
@@ -11,12 +11,6 @@ npm install axios cheerio cron @types/cron
 ```
 
 2. Compile TypeScript:
-
-```bash
-tsc hoyaeats_scheduler.ts
-```
-
-Alternatively, you can run directly with ts-node:
 
 ```bash
 npx ts-node hoyaeats_scheduler.ts --scrape
@@ -33,7 +27,7 @@ npx ts-node hoyaeats_scheduler.ts
 
 ### Run a one-time scrape
 
-To run just once without scheduling:
+To run now and then continue scheduling:
 
 ```bash
 npx ts-node hoyaeats_scheduler.ts --scrape
