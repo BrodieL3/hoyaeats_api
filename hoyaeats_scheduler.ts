@@ -540,12 +540,14 @@ function isAxiosError(error: any): error is Error & {
 
 async function fetchNutrition(
   recipeId: number, // Changed to number type
-  retryCount = 0
+  retryCount = 0,
+  refresh = false
 ): Promise<Record<string, string>> {
   const recipeIdStr = recipeId.toString();
 
-  // Check cache first
+  // Check cache first, but skip if refresh is true
   if (
+    !refresh &&
     nutritionCache[recipeIdStr] &&
     Object.keys(nutritionCache[recipeIdStr]).length > 0
   ) {
@@ -696,7 +698,7 @@ async function fetchNutrition(
           }s before retry ${retryCount + 1}`
         );
         await delay(waitTime);
-        return fetchNutrition(recipeId, retryCount + 1);
+        return fetchNutrition(recipeId, retryCount + 1, refresh);
       }
     } else if (err instanceof Error) {
       errorMessage += err.message;
@@ -776,7 +778,7 @@ async function processNutritionData(
         miniBatch.map(async (recipeId) => {
           try {
             // Fetch nutrition (will update nutritionCache inside)
-            await fetchNutrition(recipeId);
+            await fetchNutrition(recipeId, 0, true);
             fetchedCount++;
           } catch (err) {
             // Error is already logged in fetchNutrition
@@ -1135,7 +1137,9 @@ async function fileExistsInStorage(
 
 // Process nutrition data for all items collected for all dates
 async function processAllNutritionData(): Promise<void> {
-  console.log("Processing nutrition data for all items in cache...");
+  console.log(
+    "Processing nutrition data for all items in cache and locations..."
+  );
 
   try {
     // Create a set to track all unique recipe IDs
@@ -1148,6 +1152,36 @@ async function processAllNutritionData(): Promise<void> {
         allRecipeIds.add(recipeId);
       }
     });
+
+    // Additionally, scan all locations for the next 7 days to find new recipe IDs
+    const dates = getNextWeekDates();
+    for (const locationId of LOCATIONS) {
+      for (const date of dates) {
+        try {
+          console.log(
+            `Scanning ${locationId} on ${date} for new recipe IDs...`
+          );
+          const locationData = await fetchLocationPage(locationId, date);
+
+          // Extract recipe IDs from all meal periods, stations, and items
+          Object.values(locationData.mealPeriods).forEach((mealPeriod) => {
+            Object.values(mealPeriod.stations).forEach((station) => {
+              station.items.forEach((item) => {
+                if (item.recipeId > 0) {
+                  allRecipeIds.add(item.recipeId);
+                }
+              });
+            });
+          });
+        } catch (err) {
+          console.error(`Error scanning ${locationId} on ${date}:`, err);
+          // Continue with next location/date even if one fails
+        }
+
+        // Short delay between date fetches to avoid rate limiting
+        await delay(500);
+      }
+    }
 
     console.log(
       `Found ${allRecipeIds.size} unique recipe IDs to check for nutrition data.`
@@ -1181,8 +1215,8 @@ async function processAllNutritionData(): Promise<void> {
         await Promise.all(
           miniBatch.map(async (recipeId) => {
             try {
-              // Fetch nutrition (will update nutritionCache inside)
-              await fetchNutrition(recipeId);
+              // Force refresh by setting refresh=true
+              await fetchNutrition(recipeId, 0, true);
               fetchedCount++;
             } catch (err) {
               // Error is already logged in fetchNutrition

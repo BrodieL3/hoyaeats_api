@@ -4,6 +4,10 @@ import { scrapeAllLocations } from "../hoyaeats_scheduler";
 // Environment variables are automatically available from Vercel project settings
 // No need for dotenv here in production
 
+// Force dynamic route to ensure it's always server-rendered
+export const dynamic = "force-dynamic";
+
+// Export as GET to match Vercel cron job requirements
 export default async function handler(
   request: VercelRequest,
   response: VercelResponse
