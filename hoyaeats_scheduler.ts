@@ -714,7 +714,8 @@ async function fetchNutrition(
 async function processNutritionData(
   menuData: MenuData,
   itemsMap: Record<string, any>,
-  concurrency = CONCURRENT_REQUESTS
+  concurrency = CONCURRENT_REQUESTS,
+  forceRefresh = false
 ): Promise<void> {
   // Collect all unique recipe IDs that need nutrition data from both structures
   const recipesToFetchSet = new Set<number>();
@@ -725,8 +726,11 @@ async function processNutritionData(
       Object.values(day.mealPeriods).forEach((mealPeriod) => {
         Object.values(mealPeriod.stations).forEach((station) => {
           station.items.forEach((item) => {
-            // Add if recipeId exists and is not already cached
-            if (item.recipeId && !nutritionCache[item.recipeId.toString()]) {
+            // Add if recipeId exists and either not cached or force refresh is enabled
+            if (
+              item.recipeId &&
+              (forceRefresh || !nutritionCache[item.recipeId.toString()])
+            ) {
               recipesToFetchSet.add(item.recipeId);
             }
           });
@@ -737,14 +741,19 @@ async function processNutritionData(
 
   // Check items in the normalized structure (itemsMap)
   Object.values(itemsMap).forEach((item) => {
-    if (item.recipeId && !nutritionCache[item.recipeId.toString()]) {
+    if (
+      item.recipeId &&
+      (forceRefresh || !nutritionCache[item.recipeId.toString()])
+    ) {
       recipesToFetchSet.add(item.recipeId);
     }
   });
 
   const recipesToFetch = Array.from(recipesToFetchSet);
   console.log(
-    `Need to fetch nutrition data for ${recipesToFetch.length} unique items (not already cached).`
+    `Need to fetch nutrition data for ${recipesToFetch.length} unique items${
+      forceRefresh ? " (force refresh enabled)" : " (not already cached)"
+    }.`
   );
 
   if (recipesToFetch.length === 0) {
@@ -865,11 +874,14 @@ async function scrapeAllLocations(): Promise<boolean> {
     console.log(
       "All required date files already exist in Supabase Storage. No new menu data to process."
     );
-    // Still process nutrition data for existing items in the cache
-    await processAllNutritionData();
+    console.log(
+      "Running daily nutrition cache refresh to ensure all items have current nutritional information..."
+    );
+    // Process nutrition data for existing items with a comprehensive refresh
+    await processDailyNutritionRefresh();
     // Save the updated nutrition cache
     await saveNutritionCache();
-    return false; // Indicate no new data was processed
+    return true; // Changed to true since we're updating nutrition cache daily
   }
 
   // Process data for each date that needs processing
@@ -1066,6 +1078,12 @@ async function scrapeAllLocations(): Promise<boolean> {
   // Process any remaining nutrition data (includes items from all dates)
   await processAllNutritionData();
 
+  // Run a daily nutrition refresh to ensure all items have current nutritional information
+  console.log(
+    "Running daily nutrition cache refresh for comprehensive coverage..."
+  );
+  await processDailyNutritionRefresh();
+
   // Always save the updated nutrition cache at the end of the process
   await saveNutritionCache();
 
@@ -1136,9 +1154,11 @@ async function fileExistsInStorage(
 }
 
 // Process nutrition data for all items collected for all dates
-async function processAllNutritionData(): Promise<void> {
+async function processAllNutritionData(forceRefresh = false): Promise<void> {
   console.log(
-    "Processing nutrition data for all items in cache and locations..."
+    `Processing nutrition data for all items in cache and locations${
+      forceRefresh ? " (force refresh enabled)" : ""
+    }...`
   );
 
   try {
@@ -1158,9 +1178,7 @@ async function processAllNutritionData(): Promise<void> {
     for (const locationId of LOCATIONS) {
       for (const date of dates) {
         try {
-          console.log(
-            `Scanning ${locationId} on ${date} for new recipe IDs...`
-          );
+          console.log(`Scanning ${locationId} on ${date} for recipe IDs...`);
           const locationData = await fetchLocationPage(locationId, date);
 
           // Extract recipe IDs from all meal periods, stations, and items
@@ -1187,8 +1205,19 @@ async function processAllNutritionData(): Promise<void> {
       `Found ${allRecipeIds.size} unique recipe IDs to check for nutrition data.`
     );
 
-    // Convert to array for processing
-    const recipeIdsArray = Array.from(allRecipeIds);
+    // Convert to array for processing and filter based on refresh mode
+    const allRecipeIdsArray = Array.from(allRecipeIds);
+    const recipeIdsArray = forceRefresh
+      ? allRecipeIdsArray
+      : allRecipeIdsArray.filter(
+          (recipeId) => !nutritionCache[recipeId.toString()]
+        );
+
+    console.log(
+      `${forceRefresh ? "Refreshing" : "Fetching new"} nutrition data for ${
+        recipeIdsArray.length
+      } recipes.`
+    );
 
     // Process in batches with the same settings as regular nutrition processing
     const batches: number[][] = [];
@@ -1215,8 +1244,8 @@ async function processAllNutritionData(): Promise<void> {
         await Promise.all(
           miniBatch.map(async (recipeId) => {
             try {
-              // Force refresh by setting refresh=true
-              await fetchNutrition(recipeId, 0, true);
+              // Use forceRefresh parameter to determine if we should refresh cached data
+              await fetchNutrition(recipeId, 0, forceRefresh);
               fetchedCount++;
             } catch (err) {
               // Error is already logged in fetchNutrition
@@ -1245,6 +1274,115 @@ async function processAllNutritionData(): Promise<void> {
     );
   } catch (error) {
     console.error("Error processing nutrition data:", error);
+  }
+}
+
+// Daily nutrition refresh to ensure all current menu items have nutrition data
+async function processDailyNutritionRefresh(): Promise<void> {
+  console.log(
+    "Starting daily nutrition refresh to ensure comprehensive coverage..."
+  );
+
+  try {
+    // Get all current recipe IDs from all locations for the next 7 days
+    const currentRecipeIds = new Set<number>();
+    const dates = getNextWeekDates();
+
+    for (const locationId of LOCATIONS) {
+      for (const date of dates) {
+        try {
+          const locationData = await fetchLocationPage(locationId, date);
+
+          // Extract all recipe IDs from current menus
+          Object.values(locationData.mealPeriods).forEach((mealPeriod) => {
+            Object.values(mealPeriod.stations).forEach((station) => {
+              station.items.forEach((item) => {
+                if (item.recipeId > 0) {
+                  currentRecipeIds.add(item.recipeId);
+                }
+              });
+            });
+          });
+        } catch (err) {
+          console.error(
+            `Error fetching current menu for ${locationId} on ${date}:`,
+            err
+          );
+        }
+
+        // Short delay to avoid rate limiting
+        await delay(300);
+      }
+    }
+
+    console.log(
+      `Found ${currentRecipeIds.size} unique recipe IDs in current menus.`
+    );
+
+    // Find recipe IDs that are missing from nutrition cache
+    const missingNutritionIds = Array.from(currentRecipeIds).filter(
+      (recipeId) => !nutritionCache[recipeId.toString()]
+    );
+
+    if (missingNutritionIds.length > 0) {
+      console.log(
+        `Found ${missingNutritionIds.length} menu items without nutrition data. Fetching...`
+      );
+
+      // Process missing nutrition data in batches
+      const batches: number[][] = [];
+      for (let i = 0; i < missingNutritionIds.length; i += BATCH_SIZE) {
+        batches.push(missingNutritionIds.slice(i, i + BATCH_SIZE));
+      }
+
+      let fetchedCount = 0;
+      for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
+        const batch = batches[batchIndex];
+        console.log(
+          `Processing nutrition batch ${batchIndex + 1} of ${
+            batches.length
+          } (Size: ${batch.length})`
+        );
+
+        // Process each mini-batch concurrently
+        const miniBatches: number[][] = [];
+        for (let i = 0; i < batch.length; i += CONCURRENT_REQUESTS) {
+          miniBatches.push(batch.slice(i, i + CONCURRENT_REQUESTS));
+        }
+
+        for (const miniBatch of miniBatches) {
+          await Promise.all(
+            miniBatch.map(async (recipeId) => {
+              try {
+                await fetchNutrition(recipeId, 0, false); // Don't force refresh, just fetch missing
+                fetchedCount++;
+              } catch (err) {
+                console.error(
+                  `Failed to fetch nutrition for recipe ${recipeId}:`,
+                  err
+                );
+              }
+            })
+          );
+
+          await delay(DELAY_BETWEEN_ITEMS);
+        }
+
+        if (batchIndex < batches.length - 1) {
+          await delay(DELAY_BETWEEN_BATCHES);
+        }
+      }
+
+      console.log(
+        `Daily nutrition refresh completed. Fetched ${fetchedCount} missing nutrition entries.`
+      );
+    } else {
+      console.log(
+        "All current menu items already have nutrition data in cache."
+      );
+    }
+  } catch (error) {
+    console.error("Error during daily nutrition refresh:", error);
   }
 }
 
