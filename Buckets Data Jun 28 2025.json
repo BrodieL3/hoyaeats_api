@@ -1,0 +1,1422 @@
+{
+  "locations": {
+    "fresh-food-company": {
+      "name": "Fresh Food Company",
+      "mealPeriods": {
+        "Breakfast (8am-11am)": {
+          "stations": {
+            "True Balance": {
+              "itemIDs": [
+                "fried-just-egg-5938",
+                "turkey-sausage-link-5220",
+                "pancakes-3877",
+                "beyond-sausage-3804",
+                "hash-browns-5581",
+                "applesauce-5301",
+                "fresh-fruit-salad-297"
+              ]
+            },
+            "Produce Market": {
+              "itemIDs": [
+                "nonfat-greek-yogurt-5303",
+                "nonfat-strawberry-yogurt-7087",
+                "nonfat-vanilla-greek-yogurt-352",
+                "honeydew-melon-347",
+                "pineapple-slices-7522",
+                "red-grapes-157",
+                "low-fat-granola-5949",
+                "raisins-349"
+              ]
+            },
+            "comfort": {
+              "itemIDs": [
+                "old-fashioned-oatmeal-1640",
+                "scrambled-eggs-6774",
+                "pork-sausage-patty-20",
+                "o-brien-potatoes-17",
+                "whole-grain-waffle-6254",
+                "southern-biscuit-2361",
+                "sausage-gravy-7418",
+                "pancake-syrup-7033"
+              ]
+            },
+            "oven": {
+              "itemIDs": [
+                "old-fashioned-oatmeal-1640",
+                "scrambled-eggs-6774",
+                "pork-sausage-patty-20",
+                "o-brien-potatoes-17",
+                "whole-grain-waffle-6254",
+                "southern-biscuit-2361",
+                "sausage-gravy-7418",
+                "pancake-syrup-7033"
+              ]
+            },
+            "sweets": {
+              "itemIDs": [
+                "mini-blueberry-muffin-1035",
+                "apple-cinnamon-mini-muffin-312",
+                "cranberry-orange-mini-muffin-982",
+                "buttered-croissant-2533",
+                "assorted-danish-6012",
+                "cinnamon-streusel-coffee-cake-10"
+              ]
+            },
+            "Cereals": {
+              "itemIDs": [
+                "golden-grahams-cereal-7537",
+                "fruit-loops-7538",
+                "cinnamon-toast-crunch-7539",
+                "lukcy-charms-cereal-7544",
+                "rice-chex-cereal-7546"
+              ]
+            },
+            "beverages": {
+              "itemIDs": [
+                "coke-2013",
+                "pibb-xtra-soda-3713",
+                "barq-s-root-beer-2011",
+                "ginger-ale-2016",
+                "powerade-mountain-blast-2008",
+                "sprite-2014",
+                "cherry-coke-2012",
+                "diet-coke-2015",
+                "coke-zero-2009",
+                "minute-maid-lemonade-3715",
+                "mello-yello-3714",
+                "vitamin-waterxxx-acai-blueberry-pomegranate-3735"
+              ]
+            }
+          }
+        },
+        "Lunch  (11am-2pm)": {
+          "stations": {
+            "Grill": {
+              "itemIDs": [
+                "premium-potato-roll-6845",
+                "mushroom-and-swiss-burger-992",
+                "grilled-black-bean-burger-5386",
+                "tomatoes-424",
+                "shredded-lettuce-178",
+                "grilled-yellow-onions-seasoned-6867",
+                "crispy-waffle-fries-52",
+                "chipotle-mayonnaise-6244"
+              ]
+            },
+            "True Balance": {
+              "itemIDs": [
+                "penne-made-without-gluten-5327",
+                "ground-meat-sauce-6597",
+                "lemon-garlic-broccoli-2381"
+              ]
+            },
+            "Produce Market": {
+              "itemIDs": [
+                "romaine-lettuce-502",
+                "seafood-pasta-salad-5690",
+                "mediterranean-pasta-salad-5872",
+                "spring-salad-mix-289",
+                "fresh-spinach-7048",
+                "shredded-carrots-378",
+                "chopped-hard-cooked-egg-649",
+                "black-beans-364",
+                "creamy-tuna-salad-7092",
+                "tofu-5307",
+                "feta-cheese-crumbles-2217",
+                "shredded-cheddar-cheese-7036",
+                "sliced-celery-504",
+                "sliced-beets-503",
+                "mandarin-oranges-2544",
+                "blanched-broccoli-florets-6118",
+                "seasoned-croutons-494",
+                "cucumbers-495",
+                "sliced-mixed-bell-peppers-1796",
+                "grape-tomatoes-3952",
+                "creamy-tuna-salad-7092"
+              ]
+            },
+            "comfort": {
+              "itemIDs": [
+                "chicken-mushroom-cavatappi-7562",
+                "blanched-broccoli-florets-6118"
+              ]
+            },
+            "oven": {
+              "itemIDs": [
+                "classic-cheese-pizza-6801",
+                "pepperoni-pizza-6798",
+                "margherita-pizza-7416"
+              ]
+            },
+            "sweets": {
+              "itemIDs": [
+                "oatmeal-raisin-cookie-5282",
+                "sugar-cookie-5280",
+                "chocolate-chip-cookie-57",
+                "rocky-road-brownie-1548",
+                "white-sheet-cake-5942",
+                "lemon-lime-gelatin-713",
+                "crunch-s-mores-bar-1190",
+                "oreo-brownie-7156",
+                "chocolate-sheet-cake-5961"
+              ]
+            },
+            "Cereals": {
+              "itemIDs": [
+                "golden-grahams-cereal-7537",
+                "fruit-loops-7538",
+                "cinnamon-toast-crunch-7539",
+                "lukcy-charms-cereal-7544",
+                "rice-chex-cereal-7546"
+              ]
+            },
+            "beverages": {
+              "itemIDs": [
+                "coke-2013",
+                "pibb-xtra-soda-3713",
+                "barq-s-root-beer-2011",
+                "ginger-ale-2016",
+                "powerade-mountain-blast-2008",
+                "sprite-2014",
+                "cherry-coke-2012",
+                "diet-coke-2015",
+                "coke-zero-2009",
+                "minute-maid-lemonade-3715",
+                "mello-yello-3714",
+                "vitamin-waterxxx-acai-blueberry-pomegranate-3735"
+              ]
+            }
+          }
+        },
+        "Dinner (4pm-7pm)": {
+          "stations": {
+            "Grill": {
+              "itemIDs": [
+                "philly-cheesesteak-2350",
+                "lite-chipotle-mayonnaise-6422",
+                "cowboy-ketchup-7434",
+                "spicy-vegan-chicken-tenders-7481",
+                "crinkle-french-fries-6944"
+              ]
+            },
+            "True Balance": {
+              "itemIDs": [
+                "puttanesca-pork-chop-6277",
+                "rosemary-thyme-potatoes-5568",
+                "seasoned-fresh-zucchini-219"
+              ]
+            },
+            "Produce Market": {
+              "itemIDs": [
+                "romaine-lettuce-502",
+                "seafood-pasta-salad-5690",
+                "mediterranean-pasta-salad-5872",
+                "spring-salad-mix-289",
+                "fresh-spinach-7048",
+                "shredded-carrots-378",
+                "chopped-hard-cooked-egg-649",
+                "black-beans-364",
+                "creamy-tuna-salad-7092",
+                "tofu-5307",
+                "feta-cheese-crumbles-2217",
+                "shredded-cheddar-cheese-7036",
+                "sliced-celery-504",
+                "sliced-beets-503",
+                "mandarin-oranges-2544",
+                "blanched-broccoli-florets-6118",
+                "seasoned-croutons-494",
+                "cucumbers-495",
+                "sliced-mixed-bell-peppers-1796",
+                "grape-tomatoes-3952",
+                "creamy-tuna-salad-7092"
+              ]
+            },
+            "comfort": {
+              "itemIDs": [
+                "chicken-with-marsala-sauce-1854",
+                "cilantro-lime-rice-6676",
+                "balsamic-glazed-roasted-carrots-1091",
+                "assorted-dinner-rolls-5695"
+              ]
+            },
+            "oven": {
+              "itemIDs": [
+                "classic-cheese-pizza-5235",
+                "pepperoni-pizza-7524",
+                "roasted-vegetable-pizza-5774",
+                "garbanzo-bean-salad-7559"
+              ]
+            },
+            "sweets": {
+              "itemIDs": [
+                "oatmeal-raisin-cookie-5282",
+                "sugar-cookie-5280",
+                "chocolate-chip-cookie-5343",
+                "baked-yellow-cupcake-5950",
+                "white-sheet-cake-5942",
+                "fudge-brownies-5943",
+                "molten-chocolate-cake-1110",
+                "strawberry-gelatin-77",
+                "molten-chocolate-cake-1110",
+                "fudge-brownies-5943"
+              ]
+            },
+            "beverages": {
+              "itemIDs": [
+                "coke-2013",
+                "pibb-xtra-soda-3713",
+                "barq-s-root-beer-2011",
+                "ginger-ale-2016",
+                "powerade-mountain-blast-2008",
+                "sprite-2014",
+                "cherry-coke-2012",
+                "diet-coke-2015",
+                "coke-zero-2009",
+                "minute-maid-lemonade-3715",
+                "mello-yello-3714",
+                "vitamin-waterxxx-acai-blueberry-pomegranate-3735"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "epicurean-pizza": {
+      "name": "Epicurean Pizza",
+      "mealPeriods": {
+        "Breakfast (8am-11am)": {
+          "stations": {
+            "Omelet Bar": {
+              "itemIDs": [
+                "flour-tortilla-5318",
+                "deli-turkey-ham-7396",
+                "cherry-tomatoes-336",
+                "diced-ham-5893",
+                "cherry-tomatoes-336",
+                "baby-spinach-2203",
+                "breakfast-blend-eggs-6947",
+                "fried-egg-339",
+                "egg-whites-5608",
+                "pork-sasuage-patty-5223",
+                "baby-spinach-2203",
+                "turkey-sausage-patty-5496",
+                "american-cheese-415",
+                "shredded-cheddar-cheese-179",
+                "diced-yellow-onions-372",
+                "sliced-mushroom-452",
+                "sliced-mixed-bell-peppers-1796"
+              ]
+            }
+          }
+        },
+        "All day (11am-8pm)": {
+          "stations": {
+            "Grill": {
+              "itemIDs": [
+                "smash-burger-6342",
+                "grilled-chicken-quesadilla-5573",
+                "beef-quesadilla-1545",
+                "philly-cheesesteak-2350",
+                "chicken-cheesesteak-3031",
+                "all-american-beyond-burger-5778",
+                "crispy-chicken-tenders-6179",
+                "grilled-vegetable-hummus-wrap-1032"
+              ]
+            },
+            "Pizza Station": {
+              "itemIDs": [
+                "pepperoni-naan-pizza-7250",
+                "naan-cheese-pizza-7175",
+                "mushroom-naan-pizza-7249"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "items": {
+    "fried-just-egg-5938": {
+      "name": "Fried JUST Egg",
+      "recipeId": 5938,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "turkey-sausage-link-5220": {
+      "name": "Turkey Sausage Link",
+      "recipeId": 5220,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "pancakes-3877": {
+      "name": "Pancakes",
+      "recipeId": 3877,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "beyond-sausage-3804": {
+      "name": "Beyond Sausage®",
+      "recipeId": 3804,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "hash-browns-5581": {
+      "name": "Hash Browns",
+      "recipeId": 5581,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "applesauce-5301": {
+      "name": "Applesauce",
+      "recipeId": 5301,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "fresh-fruit-salad-297": {
+      "name": "Fresh Fruit Salad",
+      "recipeId": 297,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "nonfat-greek-yogurt-5303": {
+      "name": "Nonfat Greek Yogurt",
+      "recipeId": 5303,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "nonfat-strawberry-yogurt-7087": {
+      "name": "Nonfat Strawberry Yogurt",
+      "recipeId": 7087,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "nonfat-vanilla-greek-yogurt-352": {
+      "name": "Nonfat Vanilla Greek Yogurt",
+      "recipeId": 352,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "honeydew-melon-347": {
+      "name": "Honeydew Melon",
+      "recipeId": 347,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "pineapple-slices-7522": {
+      "name": "Pineapple Slices",
+      "recipeId": 7522,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "red-grapes-157": {
+      "name": "Red Grapes",
+      "recipeId": 157,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "low-fat-granola-5949": {
+      "name": "Low Fat Granola",
+      "recipeId": 5949,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "raisins-349": {
+      "name": "Raisins",
+      "recipeId": 349,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "old-fashioned-oatmeal-1640": {
+      "name": "Old Fashioned Oatmeal",
+      "recipeId": 1640,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "scrambled-eggs-6774": {
+      "name": "Scrambled Eggs",
+      "recipeId": 6774,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "pork-sausage-patty-20": {
+      "name": "Pork Sausage Patty",
+      "recipeId": 20,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "o-brien-potatoes-17": {
+      "name": "O'Brien Potatoes",
+      "recipeId": 17,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "whole-grain-waffle-6254": {
+      "name": "Whole Grain Waffle",
+      "recipeId": 6254,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "southern-biscuit-2361": {
+      "name": "Southern Biscuit",
+      "recipeId": 2361,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "sausage-gravy-7418": {
+      "name": "Sausage Gravy",
+      "recipeId": 7418,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "pancake-syrup-7033": {
+      "name": "Pancake Syrup",
+      "recipeId": 7033,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "mini-blueberry-muffin-1035": {
+      "name": "Mini Blueberry Muffin",
+      "recipeId": 1035,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "apple-cinnamon-mini-muffin-312": {
+      "name": "Apple Cinnamon Mini Muffin",
+      "recipeId": 312,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "cranberry-orange-mini-muffin-982": {
+      "name": "Cranberry Orange Mini Muffin",
+      "recipeId": 982,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "buttered-croissant-2533": {
+      "name": "Buttered Croissant",
+      "recipeId": 2533,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "assorted-danish-6012": {
+      "name": "Assorted Danish",
+      "recipeId": 6012,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "cinnamon-streusel-coffee-cake-10": {
+      "name": "Cinnamon Streusel Coffee Cake",
+      "recipeId": 10,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "golden-grahams-cereal-7537": {
+      "name": "Golden Grahams Cereal",
+      "recipeId": 7537,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "fruit-loops-7538": {
+      "name": "Fruit Loops",
+      "recipeId": 7538,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "cinnamon-toast-crunch-7539": {
+      "name": "Cinnamon Toast Crunch",
+      "recipeId": 7539,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "lukcy-charms-cereal-7544": {
+      "name": "LUKCY CHARMS CEREAL",
+      "recipeId": 7544,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "rice-chex-cereal-7546": {
+      "name": "Rice Chex Cereal",
+      "recipeId": 7546,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "coke-2013": {
+      "name": "Coke",
+      "recipeId": 2013,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "pibb-xtra-soda-3713": {
+      "name": "Pibb XTRA Soda",
+      "recipeId": 3713,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "barq-s-root-beer-2011": {
+      "name": "Barq's Root Beer",
+      "recipeId": 2011,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "ginger-ale-2016": {
+      "name": "Ginger Ale",
+      "recipeId": 2016,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "powerade-mountain-blast-2008": {
+      "name": "Powerade Mountain Blast",
+      "recipeId": 2008,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "sprite-2014": {
+      "name": "Sprite",
+      "recipeId": 2014,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "cherry-coke-2012": {
+      "name": "Cherry Coke",
+      "recipeId": 2012,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "diet-coke-2015": {
+      "name": "Diet Coke",
+      "recipeId": 2015,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "coke-zero-2009": {
+      "name": "Coke Zero",
+      "recipeId": 2009,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "minute-maid-lemonade-3715": {
+      "name": "Minute Maid Lemonade",
+      "recipeId": 3715,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "mello-yello-3714": {
+      "name": "Mello Yello",
+      "recipeId": 3714,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "vitamin-waterxxx-acai-blueberry-pomegranate-3735": {
+      "name": "Vitamin WaterXXX:Acai-Blueberry-Pomegranate",
+      "recipeId": 3735,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "premium-potato-roll-6845": {
+      "name": "Premium Potato Roll",
+      "recipeId": 6845,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "mushroom-and-swiss-burger-992": {
+      "name": "Mushroom and Swiss Burger",
+      "recipeId": 992,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "grilled-black-bean-burger-5386": {
+      "name": "Grilled Black Bean Burger",
+      "recipeId": 5386,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "tomatoes-424": {
+      "name": "Tomatoes",
+      "recipeId": 424,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "shredded-lettuce-178": {
+      "name": "Shredded Lettuce",
+      "recipeId": 178,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "grilled-yellow-onions-seasoned-6867": {
+      "name": "Grilled Yellow Onions (Seasoned)",
+      "recipeId": 6867,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "crispy-waffle-fries-52": {
+      "name": "Crispy Waffle Fries",
+      "recipeId": 52,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "chipotle-mayonnaise-6244": {
+      "name": "Chipotle Mayonnaise",
+      "recipeId": 6244,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "penne-made-without-gluten-5327": {
+      "name": "Penne (made without gluten)",
+      "recipeId": 5327,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "ground-meat-sauce-6597": {
+      "name": "Ground Meat Sauce",
+      "recipeId": 6597,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "lemon-garlic-broccoli-2381": {
+      "name": "Lemon Garlic Broccoli",
+      "recipeId": 2381,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "romaine-lettuce-502": {
+      "name": "Romaine Lettuce",
+      "recipeId": 502,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "seafood-pasta-salad-5690": {
+      "name": "Seafood Pasta Salad",
+      "recipeId": 5690,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "mediterranean-pasta-salad-5872": {
+      "name": "Mediterranean Pasta Salad",
+      "recipeId": 5872,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "spring-salad-mix-289": {
+      "name": "Spring Salad Mix",
+      "recipeId": 289,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "fresh-spinach-7048": {
+      "name": "Fresh Spinach",
+      "recipeId": 7048,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "shredded-carrots-378": {
+      "name": "Shredded Carrots",
+      "recipeId": 378,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "chopped-hard-cooked-egg-649": {
+      "name": "Chopped Hard Cooked Egg",
+      "recipeId": 649,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "black-beans-364": {
+      "name": "Black Beans",
+      "recipeId": 364,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "creamy-tuna-salad-7092": {
+      "name": "Creamy Tuna Salad",
+      "recipeId": 7092,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "tofu-5307": {
+      "name": "Tofu",
+      "recipeId": 5307,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "feta-cheese-crumbles-2217": {
+      "name": "Feta Cheese Crumbles",
+      "recipeId": 2217,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "shredded-cheddar-cheese-7036": {
+      "name": "Shredded Cheddar Cheese",
+      "recipeId": 7036,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "sliced-celery-504": {
+      "name": "Sliced Celery",
+      "recipeId": 504,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "sliced-beets-503": {
+      "name": "Sliced Beets",
+      "recipeId": 503,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "mandarin-oranges-2544": {
+      "name": "Mandarin Oranges",
+      "recipeId": 2544,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "blanched-broccoli-florets-6118": {
+      "name": "Blanched Broccoli Florets",
+      "recipeId": 6118,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "seasoned-croutons-494": {
+      "name": "Seasoned Croutons",
+      "recipeId": 494,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "cucumbers-495": {
+      "name": "Cucumbers",
+      "recipeId": 495,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "sliced-mixed-bell-peppers-1796": {
+      "name": "Sliced Mixed Bell Peppers",
+      "recipeId": 1796,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "grape-tomatoes-3952": {
+      "name": "Grape Tomatoes",
+      "recipeId": 3952,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "chicken-mushroom-cavatappi-7562": {
+      "name": "Chicken & Mushroom Cavatappi",
+      "recipeId": 7562,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "classic-cheese-pizza-6801": {
+      "name": "Classic Cheese Pizza",
+      "recipeId": 6801,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "pepperoni-pizza-6798": {
+      "name": "Pepperoni Pizza",
+      "recipeId": 6798,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "margherita-pizza-7416": {
+      "name": "Margherita Pizza",
+      "recipeId": 7416,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "oatmeal-raisin-cookie-5282": {
+      "name": "Oatmeal Raisin Cookie",
+      "recipeId": 5282,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "sugar-cookie-5280": {
+      "name": "Sugar Cookie",
+      "recipeId": 5280,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "chocolate-chip-cookie-57": {
+      "name": "Chocolate Chip Cookie",
+      "recipeId": 57,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "rocky-road-brownie-1548": {
+      "name": "Rocky Road Brownie",
+      "recipeId": 1548,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "white-sheet-cake-5942": {
+      "name": "White Sheet Cake",
+      "recipeId": 5942,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "lemon-lime-gelatin-713": {
+      "name": "Lemon-Lime Gelatin",
+      "recipeId": 713,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "crunch-s-mores-bar-1190": {
+      "name": "Crunch S'mores Bar",
+      "recipeId": 1190,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "oreo-brownie-7156": {
+      "name": "Oreo Brownie",
+      "recipeId": 7156,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "chocolate-sheet-cake-5961": {
+      "name": "Chocolate Sheet Cake",
+      "recipeId": 5961,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "philly-cheesesteak-2350": {
+      "name": "Philly Cheesesteak",
+      "recipeId": 2350,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "lite-chipotle-mayonnaise-6422": {
+      "name": "Lite Chipotle Mayonnaise",
+      "recipeId": 6422,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "cowboy-ketchup-7434": {
+      "name": "Cowboy Ketchup",
+      "recipeId": 7434,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "spicy-vegan-chicken-tenders-7481": {
+      "name": "Spicy Vegan Chicken Tenders",
+      "recipeId": 7481,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "crinkle-french-fries-6944": {
+      "name": "Crinkle French Fries",
+      "recipeId": 6944,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "puttanesca-pork-chop-6277": {
+      "name": "Puttanesca Pork Chop",
+      "recipeId": 6277,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "rosemary-thyme-potatoes-5568": {
+      "name": "Rosemary Thyme Potatoes",
+      "recipeId": 5568,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "seasoned-fresh-zucchini-219": {
+      "name": "Seasoned Fresh Zucchini",
+      "recipeId": 219,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "chicken-with-marsala-sauce-1854": {
+      "name": "Chicken with Marsala Sauce",
+      "recipeId": 1854,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "cilantro-lime-rice-6676": {
+      "name": "Cilantro Lime Rice",
+      "recipeId": 6676,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "balsamic-glazed-roasted-carrots-1091": {
+      "name": "Balsamic Glazed Roasted Carrots",
+      "recipeId": 1091,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "assorted-dinner-rolls-5695": {
+      "name": "Assorted Dinner Rolls",
+      "recipeId": 5695,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "classic-cheese-pizza-5235": {
+      "name": "Classic Cheese Pizza",
+      "recipeId": 5235,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "pepperoni-pizza-7524": {
+      "name": "Pepperoni Pizza",
+      "recipeId": 7524,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "roasted-vegetable-pizza-5774": {
+      "name": "Roasted Vegetable Pizza",
+      "recipeId": 5774,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "garbanzo-bean-salad-7559": {
+      "name": "Garbanzo Bean Salad",
+      "recipeId": 7559,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "chocolate-chip-cookie-5343": {
+      "name": "Chocolate Chip Cookie",
+      "recipeId": 5343,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "baked-yellow-cupcake-5950": {
+      "name": "Baked Yellow Cupcake",
+      "recipeId": 5950,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "fudge-brownies-5943": {
+      "name": "Fudge Brownies",
+      "recipeId": 5943,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "molten-chocolate-cake-1110": {
+      "name": "Molten Chocolate Cake",
+      "recipeId": 1110,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "strawberry-gelatin-77": {
+      "name": "Strawberry Gelatin",
+      "recipeId": 77,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:28.322Z"
+    },
+    "flour-tortilla-5318": {
+      "name": "Flour Tortilla",
+      "recipeId": 5318,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "deli-turkey-ham-7396": {
+      "name": "Deli Turkey Ham",
+      "recipeId": 7396,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "cherry-tomatoes-336": {
+      "name": "Cherry Tomatoes",
+      "recipeId": 336,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "diced-ham-5893": {
+      "name": "Diced Ham",
+      "recipeId": 5893,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "baby-spinach-2203": {
+      "name": "Baby Spinach",
+      "recipeId": 2203,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "breakfast-blend-eggs-6947": {
+      "name": "Breakfast Blend Eggs",
+      "recipeId": 6947,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "fried-egg-339": {
+      "name": "Fried Egg",
+      "recipeId": 339,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "egg-whites-5608": {
+      "name": "Egg Whites",
+      "recipeId": 5608,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "pork-sasuage-patty-5223": {
+      "name": "Pork Sasuage Patty",
+      "recipeId": 5223,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "turkey-sausage-patty-5496": {
+      "name": "Turkey Sausage Patty",
+      "recipeId": 5496,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "american-cheese-415": {
+      "name": "American Cheese",
+      "recipeId": 415,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "shredded-cheddar-cheese-179": {
+      "name": "Shredded Cheddar Cheese",
+      "recipeId": 179,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "diced-yellow-onions-372": {
+      "name": "Diced Yellow Onions",
+      "recipeId": 372,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "sliced-mushroom-452": {
+      "name": "Sliced Mushroom",
+      "recipeId": 452,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": true,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "smash-burger-6342": {
+      "name": "Smash Burger",
+      "recipeId": 6342,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "grilled-chicken-quesadilla-5573": {
+      "name": "Grilled Chicken Quesadilla",
+      "recipeId": 5573,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "beef-quesadilla-1545": {
+      "name": "Beef Quesadilla",
+      "recipeId": 1545,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "chicken-cheesesteak-3031": {
+      "name": "Chicken Cheesesteak",
+      "recipeId": 3031,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "all-american-beyond-burger-5778": {
+      "name": "All American Beyond Burger",
+      "recipeId": 5778,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "crispy-chicken-tenders-6179": {
+      "name": "Crispy Chicken Tenders",
+      "recipeId": 6179,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "grilled-vegetable-hummus-wrap-1032": {
+      "name": "Grilled Vegetable & Hummus Wrap",
+      "recipeId": 1032,
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "pepperoni-naan-pizza-7250": {
+      "name": "Pepperoni Naan Pizza",
+      "recipeId": 7250,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "naan-cheese-pizza-7175": {
+      "name": "Naan Cheese Pizza",
+      "recipeId": 7175,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    },
+    "mushroom-naan-pizza-7249": {
+      "name": "Mushroom Naan Pizza",
+      "recipeId": 7249,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": false,
+      "timeFetched": "2025-06-22T05:22:35.459Z"
+    }
+  },
+  "date": "2025-06-28",
+  "lastUpdated": "2025-06-22T05:22:39.014Z"
+}
